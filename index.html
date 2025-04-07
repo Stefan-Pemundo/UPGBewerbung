@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewerbungsformular</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 100px;
+            background-color: #E3ECF5;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .job-code-display {
+            background-color: #444444;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 0px solid #0066cc;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            font-size: 16px;
+
+        }
+
+        h5 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: normal;
+
+        }
+
+
+        label {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input,
+        textarea,
+        select {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .checkbox-label {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: flex-start;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .checkbox-text {
+            margin-top: 0;
+        }
+
+        button {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #E3ECF5;
+            color: black;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #24e77d;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 0px solid #721c24;
+        }
+
+        .loading {
+            background-color: #e2f3f8;
+            color: #0c5460;
+            border-left: 0px solid #0c5460;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+
+        .file-info {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="UPG.webp" alt="Upgreat Logo" style="width:184px;height:32px;">
+        <h1>Bewerbungsformular 🎉 </h1>
+        <h5> Wir freuen uns auf deine Bewerbung! Wenn du Fragen hast, melde dich gerne direkt unter
+            recruiting@pemundo.dev</h5>
+        <div class="job-code-display">
+            Job Code: <span id="jobCodeDisplay">Loading...</span><br>
+            Position: <span id="positionNameDisplay">Loading...</span>
+        </div>
+
+        <form id="applicationForm">
+            <!-- Hidden job code field -->
+            <input type="hidden" id="jobCode" name="jobCode" value="">
+            <input type="hidden" id="positionName" name="positionName" value="">
+
+
+
+            <div class="form-group">
+                <label for="firstName" class="required">Vorname</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lastName" class="required">Nachname</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="required">E-Mail Addresse</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone" class="required">Telefonnummer</label>
+                <input type="text" id="phone" name="phone" required>
+            </div>
+
+            <div class="form-group">
+                <label for="salary" class="required">Gehaltswunsch (€ pro Jahr)</label>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" id="salary" name="salary" required>
+            </div>
+
+            <div class="form-group">
+                <label for="startDate" class="required">Frühestes Startdatum</label>
+                <input type="date" id="startDate" name="startDate" required>
+            </div>
+
+            <div class="form-group">
+                <label for="source" class="required">Wie bist du auf uns aufmerksam geworden?</label>
+                <select name="source" id="source" required>
+                    <option value="">Bitte wählen</option>
+                    <option value="option1">karriere.at</option>
+                    <option value="option2">LinkedIn</option>
+                    <option value="option3">Indeed</option>
+                    <option value="option4">Website</option>
+                    <option value="option5">Empfehlung</option>
+                    <option value="option6">Google</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cv" class="required">Lebenslauf</label>
+                <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+                <div class="file-info">Unterstützte Formate: PDF, DOC, DOCX. Max. Größe: 10MB</div>
+            </div>
+
+            <div class="form-group">
+                <label for="letter">Anschreiben</label>
+                <input type="file" id="letter" name="letter" accept=".pdf,.doc,.docx">
+                <div class="file-info">Unterstützte Formate: PDF, DOC, DOCX. Max. Größe: 10MB</div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-label">
+                    <input type="checkbox" id="dataProtection" name="dataProtection" required>
+                    <label for="dataProtection" class="checkbox-text required">
+                        Ich bin mit der Verarbeitung meiner personenbezogenen Daten gemäß den Datenschutzbestimmungen
+                        einverstanden. Die angegebenen Daten werden ausschließlich für das Bewerbungsverfahren
+                        verwendet. Weitere Informationen zu unseren Datenschutzbestimmungen finden Sie <a
+                            href="https://www.pemundo.com/datenschutz">hier</a>.
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" id="submitButton">Jetzt bewerben 📩 </button>
+        </form>
+
+        <div id="status"></div>
+    </div>
+
+    <script>
+        // Set today as the minimum date for start date
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get and display job code from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const jobCode = urlParams.get('jobCode') || 'DEFAULT_JOB';
+            const positionName = urlParams.get('positionName') || 'DEFAULT_POSITION';
+
+            document.getElementById('jobCode').value = jobCode;
+            document.getElementById('jobCodeDisplay').textContent = jobCode;
+
+            // Set position name
+            document.getElementById('positionName').value = positionName;
+            document.getElementById('positionNameDisplay').textContent = positionName;
+
+            // Set minimum date for start date (today)
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('startDate').min = formattedDate;
+
+            console.log('Job Code:', jobCode);
+            console.log('Position Name:', positionName);
+
+        });
+
+        // Handle form submission
+        document.getElementById('applicationForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const statusElement = document.getElementById('status');
+            const submitButton = document.getElementById('submitButton');
+
+            statusElement.textContent = 'Deine Bewerbung wird übermittelt...';
+            statusElement.className = 'Lädt...';
+            statusElement.style.display = 'block';
+
+            submitButton.disabled = true;
+
+            // Get form data
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const jobCode = document.getElementById('jobCode').value;
+            const positionName = document.getElementById('positionName').value;
+            const salary = document.getElementById('salary').value;
+            const startDate = document.getElementById('startDate').value;
+            const source = document.getElementById('source').value;
+            const dataProtection = document.getElementById('dataProtection').checked;
+
+            // Get file elements
+            const cvInput = document.getElementById('cv');
+            const letterInput = document.getElementById('letter');
+
+            // Check if both files are selected
+            if (!cvInput.files[0]) {
+                statusElement.textContent = 'Bitte lade deinen Lebenslauf hoch';
+                statusElement.className = 'error';
+                submitButton.disabled = false;
+                return;
+            }
+
+            // Check file sizes (max 10MB each)
+            const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+            if (cvInput.files[0].size > MAX_FILE_SIZE || letterInput.files[0].size > MAX_FILE_SIZE) {
+                statusElement.textContent = '❌ Die Dateigröße überschreitet die 10MB Grenze. Bitte lade kleinere Dateien hoch.';
+                statusElement.className = 'error';
+                submitButton.disabled = false;
+                return;
+            }
+
+            // Read files as Base64
+            const readFileAsBase64 = (file) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+            };
+
+            try {
+                // Convert files to Base64
+                const cvBase64 = await readFileAsBase64(cvInput.files[0]);
+                const letterBase64 = await readFileAsBase64(letterInput.files[0]);
+
+                // Prepare data for Power Automate
+                const requestData = {
+                    jobCode: jobCode,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone,
+                    salary: salary,
+                    startDate: startDate,
+                    source: source,
+                    dataProtection: dataProtection ? "Yes" : "No",
+                    cv: {
+                        name: cvInput.files[0].name,
+                        type: cvInput.files[0].type,
+                        content: cvBase64
+                    },
+                    letter: {
+                        name: letterInput.files[0].name,
+                        type: letterInput.files[0].type,
+                        content: letterBase64
+                    }
+                };
+
+                // Replace with your Power Automate flow URL
+                const powerAutomateUrl = 'https://prod-91.westeurope.logic.azure.com:443/workflows/6de8eec927d04794aa5c0fa21031194b/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Yx8ezTeNvnCxeA9U8ywzYb0L50BkL7uK7oyPQ6CZedU';
+
+                // Send the request
+                const response = await fetch(powerAutomateUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                // Log response details
+                console.log('Response status:', response.status);
+                console.log('Response status text:', response.statusText);
+
+                // Get response text
+                const responseText = await response.text();
+                console.log('Raw response:', responseText);
+
+                // Try to parse JSON if possible
+                let data;
+                try {
+                    data = responseText ? JSON.parse(responseText) : {};
+                } catch (e) {
+                    console.log('Response is not JSON');
+                    data = { message: responseText || 'Success' };
+                }
+
+                // Success handling
+                console.log('Success data:', data);
+                statusElement.textContent = 'Danke für dein Interesse - deine Bewerbung wurde erfolgreich übermittelt 🎉 ';
+                statusElement.className = 'success';
+                document.getElementById('applicationForm').reset();
+
+            } catch (error) {
+                // Error handling
+                console.error('Error details:', error);
+                statusElement.textContent = 'Fehler beim Übermitteln der Bewerbung. Bitte versuche es später erneut oder wende dich direkt an recruiting@pemundo.dev';
+                statusElement.className = 'error';
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
