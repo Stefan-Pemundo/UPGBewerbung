@@ -324,75 +324,76 @@
             };
 
             try {
-                // Convert files to Base64
-                const cvBase64 = await readFileAsBase64(cvInput.files[0]);
-                const letterBase64 = await readFileAsBase64(letterInput.files[0]);
+    const cvBase64 = await readFileAsBase64(cvInput.files[0]);
 
-                // Prepare data for Power Automate
-                const requestData = {
-                    jobCode: jobCode,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone,
-                    salary: salary,
-                    startDate: startDate,
-                    source: source,
-                    dataProtection: dataProtection ? "Yes" : "No",
-                    cv: {
-                        name: cvInput.files[0].name,
-                        type: cvInput.files[0].type,
-                        content: cvBase64
-                    },
-                    letter: {
-                        name: letterInput.files[0].name,
-                        type: letterInput.files[0].type,
-                        content: letterBase64
-                    }
-                };
+    let letterBase64 = null;
+    if (letterInput.files.length > 0) {
+        // Optional file exists, check size
+        if (letterInput.files[0].size > MAX_FILE_SIZE) {
+            statusElement.textContent = '❌ Die Dateigröße überschreitet die 10MB Grenze. Bitte lade kleinere Dateien hoch.';
+            statusElement.className = 'error';
+            submitButton.disabled = false;
+            return;
+        }
+        letterBase64 = await readFileAsBase64(letterInput.files[0]);
+    }
+
+    const requestData = {
+        jobCode: jobCode,
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        phone: phone,
+        salary: salary,
+        startDate: startDate,
+        source: source,
+        dataProtection: dataProtection ? "Yes" : "No",
+        cv: {
+            name: cvInput.files[0].name,
+            type: cvInput.files[0].type,
+            content: cvBase64
+        }
+    };
+
+    // Only add the letter object if the file was uploaded
+    if (letterInput.files.length > 0) {
+        requestData.letter = {
+            name: letterInput.files[0].name,
+            type: letterInput.files[0].type,
+            content: letterBase64
+        };
+    }
 
                 // Replace with your Power Automate flow URL
                 const powerAutomateUrl = 'https://prod-91.westeurope.logic.azure.com:443/workflows/6de8eec927d04794aa5c0fa21031194b/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=Yx8ezTeNvnCxeA9U8ywzYb0L50BkL7uK7oyPQ6CZedU';
 
-                // Send the request
-                const response = await fetch(powerAutomateUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                });
+// Send to Power Automate
+    const response = await fetch(powerAutomateUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    });
 
-                // Log response details
-                console.log('Response status:', response.status);
-                console.log('Response status text:', response.statusText);
+    const responseText = await response.text();
+    let data;
+    try {
+        data = responseText ? JSON.parse(responseText) : {};
+    } catch (e) {
+        data = { message: responseText || 'Success' };
+    }
 
-                // Get response text
-                const responseText = await response.text();
-                console.log('Raw response:', responseText);
+    statusElement.textContent = 'Danke für dein Interesse - deine Bewerbung wurde erfolgreich übermittelt 🎉 ';
+    statusElement.className = 'success';
+    document.getElementById('applicationForm').reset();
 
-                // Try to parse JSON if possible
-                let data;
-                try {
-                    data = responseText ? JSON.parse(responseText) : {};
-                } catch (e) {
-                    console.log('Response is not JSON');
-                    data = { message: responseText || 'Success' };
-                }
-
-                // Success handling
-                console.log('Success data:', data);
-                statusElement.textContent = 'Danke für dein Interesse - deine Bewerbung wurde erfolgreich übermittelt 🎉 ';
-                statusElement.className = 'success';
-                document.getElementById('applicationForm').reset();
-
-            } catch (error) {
-                // Error handling
-                console.error('Error details:', error);
-                statusElement.textContent = 'Fehler beim Übermitteln der Bewerbung. Bitte versuche es später erneut oder wende dich direkt an recruiting@pemundo.dev';
-                statusElement.className = 'error';
-                submitButton.disabled = false;
-            }
+} catch (error) {
+    console.error('Error details:', error);
+    statusElement.textContent = 'Fehler beim Übermitteln der Bewerbung. Bitte versuche es später erneut oder wende dich direkt an recruiting@pemundo.dev';
+    statusElement.className = 'error';
+    submitButton.disabled = false;
+}
         });
     </script>
 </body>
